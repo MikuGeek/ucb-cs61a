@@ -121,6 +121,15 @@ def make_repeater(func, n):
     5
     """
     "*** YOUR CODE HERE ***"
+    res = identity
+    for x in range(n):
+        res = compose1(func, res)
+    return res
+    #You should notice that, if a fucntion use function name as its return value,
+    #the whole function containing it would not to evaluated until the whole function is called. 
+    #So in this case, if n = 2, only imagine that compose1(func, compose1(func, identity))
+    #There not a approciate way to think what is the most inner function is.
+    #That really confused me. 23-09-15
 
 def zero(f):
     return lambda x: x
@@ -131,6 +140,7 @@ def successor(n):
 def one(f):
     """Church numeral 1: same as successor(zero)"""
     "*** YOUR CODE HERE ***"
+    
 
 def two(f):
     """Church numeral 2: same as successor(successor(zero))"""
