@@ -126,9 +126,11 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
-
     # Two original value for feral hogs
     score0_add = score1_add = 0
+
+    # Num of turn
+    num_turn = 0
 
     # Main take turn process for 2 palyers
     def take_turn_with_rules(strategy, score_p, score_o, score_add):
@@ -147,16 +149,34 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
         if score_o >= goal or score_p >= goal:
             break_jud = 1
         return score_p, score_o, score_add, break_jud
-
+        
     # The main while loop
     while True:
+        num_turn += 1
+
         score0, score1, score0_add, break_jud = take_turn_with_rules(strategy0, score0, score1, score0_add)
+
+        if say != silence:
+            if num_turn == 1:
+                com_func = say(score0, score1)
+            else:
+                com_func = com_func(score0, score1)
         if break_jud:
             break
         
+        num_turn +=1
+
         score1, score0, score1_add, break_jud = take_turn_with_rules(strategy1, score1, score0, score1_add)
+
+        if say != silence:
+            if num_turn == 1:
+                com_func = say(score0, score1)
+            else:
+                com_func = com_func(score0, score1)
         if break_jud:
             break
+
+#    The former plan:
 #    while True:
 #        score0_add = take_turn(strategy0(score0,score1), score1, dice)
 #        score0 += score0_add
@@ -176,6 +196,7 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
     "*** YOUR CODE HERE ***"
+    # The code is just in the while loop.
     # END PROBLEM 6
     return score0, score1
 
@@ -262,6 +283,33 @@ def announce_highest(who, last_score=0, running_high=0):
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
+    def say(score0, score1):
+        def say_to_who(score):
+            gain = score - last_score
+            if gain > running_high:
+                print(gain, "point(s)! That's the biggest gain yet for Player", who)
+                return announce_highest(who, score, gain)
+            else:
+                return announce_highest(who, score, running_high)
+        if who == 0:
+            return say_to_who(score0)
+        else:
+            return say_to_who(score1)
+    return say
+    # Take some notes here:
+    # 1.last_score is just the Last Score !!!
+    # Well, most people will not consider it the addition! But it occurs to me.
+    # The problem of the understanding is that 
+    # because a player will not take two turns continuously.
+    # So some addition must be 0, but the later turn after that must be bigger!!!
+    # Understand it as the derivate, evaluate derivate must get some lost.
+    # So it's not a nice solution to the algorithm.
+    # 2.Why not use nonlocal?
+    # In the test case, there are cases that call the formerly-bulit function.
+    # So if having called one branch of function,
+    # laterly calling another branch will be confused by the value of variable
+    # But use recusion will not lead to that problem.
+    # Since every turn the value is restored in a different environment.
     # END PROBLEM 7
 
 
