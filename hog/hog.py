@@ -349,6 +349,13 @@ def make_averaged(original_function, trials_count=1000):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    def repeated_fuc(*args):
+        sum_ori = 0
+        for x in range(trials_count):
+            turn_ori = original_function(*args)
+            sum_ori += turn_ori
+        return sum_ori / trials_count
+    return repeated_fuc
     # END PROBLEM 8
 
 
@@ -363,6 +370,14 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    aver_list = []
+    for roll_num in range(1,11):
+        aver_list.append(make_averaged(roll_dice, trials_count)(roll_num, dice))
+    max_aver = max(aver_list)
+    print("DEBUG:", aver_list)
+    for index in range(10):
+        if aver_list[index] == max_aver:
+            return index + 1
     # END PROBLEM 9
 
 
@@ -412,7 +427,11 @@ def bacon_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Replace this statement
+    print("DEBUG:", free_bacon(opponent_score))
+    if free_bacon(opponent_score) >= cutoff:
+        return 0
+    else:
+        return num_rolls
     # END PROBLEM 10
 
 
@@ -421,8 +440,19 @@ def swap_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     rolls 0 dice if it gives at least CUTOFF points and does not trigger a
     non-beneficial swap. Otherwise, it rolls NUM_ROLLS.
     """
+    # Well, it's said that there is a beneficial swap after roll 0
     # BEGIN PROBLEM 11
-    return 6  # Replace this statement
+    print("DEBUG:",is_swap(score, opponent_score))
+    print("DEBUG:",free_bacon(opponent_score))
+    if is_swap(score + free_bacon(opponent_score), opponent_score): 
+        if score + free_bacon(opponent_score) <= opponent_score:
+            return 0
+        else:
+            return num_rolls
+    elif free_bacon(opponent_score) >= cutoff:
+        return 0
+    else:
+        return num_rolls
     # END PROBLEM 11
 
 
