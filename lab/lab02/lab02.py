@@ -15,7 +15,7 @@ def lambda_curry2(func):
     3
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return lambda x: lambda y: func(x,y)
 
 
 
@@ -47,6 +47,14 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
+    def count_func(n):
+        i, count = 1, 0
+        while i <= n:
+            if condition(n, i):
+                count +=1
+            i +=1
+        return count
+    return count_func
 
 
 
@@ -62,8 +70,13 @@ def both_paths(sofar="S"):
     SUU
     """
     "*** YOUR CODE HERE ***"
-
-
+    print(sofar, end="")
+    def up():
+        return both_paths(sofar+"U")
+    def down():
+        return both_paths(sofar+"D")
+    return up, down
+    
 
 def compose1(f, g):
     """Return the composition function which given x, computes f(g(x)).
@@ -97,6 +110,12 @@ def composite_identity(f, g):
     False
     """
     "*** YOUR CODE HERE ***"
+    def is_swap_value_equal(x):
+        lhs = compose1(f, g)
+        rhs = compose1(g, f)
+        return lhs(x) == rhs(x)
+    return is_swap_value_equal
+        
 
 
 
@@ -127,4 +146,19 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
+    def cycle_to_n(n):
+        def inner(x):
+            round = n // 3
+            step = n % 3
+            result = x
+            for i in range(round):
+                result = f3(f2(f1(result)))
+            if step == 0:
+                return result
+            elif step == 1:
+                return f1(result)
+            elif step == 2:
+                return f2(f1(result))
+        return inner
+    return cycle_to_n
 
