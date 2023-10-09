@@ -81,6 +81,14 @@ def num_eights(x):
     else:
         return num_eights(x//10)
 
+def eight_jud(x):
+    if num_eights(x) > 0:
+        return True
+    elif x%8 == 0:
+        return True
+    else:
+        return False
+
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
 
@@ -114,3 +122,21 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    def pingpong_dir(ori):
+        if ori == 1:
+            return 1
+        if eight_jud(ori):
+            return pingpong_dir(ori - 1) * (- 1)
+        else:
+            return pingpong_dir(ori - 1)
+    
+    if n == 1:
+        return 1
+    print("DEBUG:", pingpong_dir(n-1))
+    if pingpong_dir(n-1) > 0:
+        print("DEBUG:", "A")
+        return pingpong(n-1) + 1
+    else:
+        print("DEBUG:", "B")
+        return pingpong(n-1) - 1 
+
