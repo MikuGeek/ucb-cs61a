@@ -127,6 +127,7 @@ def make_repeater(func, n):
     return res
     #You should notice that, if a fucntion use function name as its return value,
     #the whole function containing the inner function name would not to evaluated until the whole function is called. 
+    #23-10-10 ADDED: Use brackets to call the func.
     #So in this case, if n = 2, only imagine that compose1(func, compose1(func, identity))
     #There not a approciate way to think what is the most inner function is.
     #That really confused me. 23-09-15

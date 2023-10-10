@@ -21,6 +21,18 @@ def composer(func=lambda x: x):
     """
     def func_adder(g):
         "*** YOUR CODE HERE ***"
+        def func_inner(x):
+            return func(g(x))
+    # ATTENTION: Notice subsequence of func and g
+    # Applied to the innermost x
+        return composer(func_inner)
+    # The function here is to combine the former function and the g
+    # Definition that def func_inner(): return g(func) is false
+    # Because func_inner is just a normal function , i.e., 
+    # It just return the number as value, not func
+    # So if defined mistakenly, the case "int + func" will occur 
+    # and result in a error.
+    # 23-10-10
     return func, func_adder
 
 
@@ -43,6 +55,11 @@ def g(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n <= 3:
+        return n
+    else:
+        return g(n-1) + 2 * g(n-2) + 3 * g(n-3)
+    
 
 def g_iter(n):
     """Return the value of G(n), computed iteratively.
@@ -63,7 +80,15 @@ def g_iter(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if n <= 3:
+        return n
+    else:
+        list_num = [1, 2, 3]
+        for x in range(n-3):
+            new_num = 3 * list_num[x] + 2 * list_num[x+1] + list_num[x+2]
+            list_num.append(new_num)
+            print("DEBUG:", list_num)
+        return list_num[-1]
 
 def missing_digits(n):
     """Given a number a that is in sorted, increasing order,
