@@ -118,6 +118,15 @@ def missing_digits(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if(len(str(n)) == 1):
+        return 0
+    elif(len(str(n)) == 2):
+        return int(str(n)[1]) - int(str(n)[0]) - 1
+    else:
+        if int(str(n)[-2]) in range(int(str(n)[0]) + 1, int(str(n)[-1])):
+            return missing_digits(int(str(n)[0] + str(n)[1:-1].replace(str(n)[-2], "") + str(n)[-1])) - 1
+        else:
+            return missing_digits(int(str(n)[0] + str(n)[1:-1].replace(str(n)[-2], "") + str(n)[-1]))
 
 
 def count_change(total):
@@ -137,6 +146,18 @@ def count_change(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def count_change_for4(total_in_4):
+        return 4**(total_in_4/4)
+    # Here I calculate number of times of 4 in total.
+    # And any time of 4 can be arranged in 4 methods.
+    if total == 1:
+        return 1
+    if total == 2 or total == 3:
+        return 2
+    else:
+        times_4 = count_change // 4
+        change_4 = count_change % 4
+        return count_change(change_4) + count_change_for4(times_4)
 
 
 def print_move(origin, destination):
