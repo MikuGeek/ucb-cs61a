@@ -1,4 +1,3 @@
-# 
 def path(m, n):
     """Return the number of paths from one corner
     of an M * N grid to the opposite of the corner
