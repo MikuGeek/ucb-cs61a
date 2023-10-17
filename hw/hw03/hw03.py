@@ -129,6 +129,12 @@ def missing_digits(n):
             return missing_digits(int(str(n)[0] + str(n)[1:-1].replace(str(n)[-2], "") + str(n)[-1]))
 
 
+def less_total_power_two(total):
+    if total == 1:
+        return 1
+    else:
+        return less_total_power_two(total//2) + 1
+
 def count_change(total):
     """Return the number of ways to make change for total.
 
@@ -146,18 +152,17 @@ def count_change(total):
     True
     """
     "*** YOUR CODE HERE ***"
-    def count_change_for4(total_in_4):
-        return 4**(total_in_4/4)
-    # Here I calculate number of times of 4 in total.
-    # And any time of 4 can be arranged in 4 methods.
-    if total == 1:
-        return 1
-    if total == 2 or total == 3:
-        return 2
-    else:
-        times_4 = count_change // 4
-        change_4 = count_change % 4
-        return count_change(change_4) + count_change_for4(times_4)
+    def count_change_inner(data):
+        print("DEBUG:", data)
+        if data[0] == 0:
+            print("DEBUG:", 1)
+            return 1
+        elif data[1] == 0 or data[0] < 0:
+            print("DEBUG:", 2)
+            return 0
+        else:
+            return count_change_inner([data[0] - data[1], data[1]]) + count_change_inner([data[0], data[1] // 2])
+    return count_change_inner([total, 2 ** less_total_power_two(total)])
 
 
 def print_move(origin, destination):
