@@ -55,11 +55,23 @@ def check_hole_number(x):
     return True
 
 def check_mountain_number(x):
-    inc_lst = dec_lst = 0
-    for i in range(len(str(x))-1):
-        if int(str(x)[i+1]) > int(str(x)[i]):
-            inc_lst += 1
-        elif int(str(x)[i+1]) < int(str(x)[i]):
-            dec_lst += 1
-    if inc_lst == len(str(x)) or dec_lst == len(str(x)):
+    lst_x = list(map(int, list(str(x))))
+    print(lst_x)
+    def up(lst_x):
+        if len(lst_x) == 1:
+            return True
+        for x in range(0, len(lst_x) - 1):
+            if not lst_x[x] < lst_x[x + 1]:
+                    return False
         return True
+    def down(lst_x):
+        if len(lst_x) == 1:
+            return True
+        for x in range(0, len(lst_x) - 1):
+            if not lst_x[x] > lst_x[x + 1]:
+                    return False
+        return True
+    max_ind = lst_x.index(max(lst_x))
+    print(lst_x[:max_ind], lst_x[max_ind:])
+    return up(lst_x[:max_ind]) and down(lst_x[max_ind:])
+    
