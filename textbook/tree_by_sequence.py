@@ -3,33 +3,37 @@ def tree(root_label, branches = []):
         assert is_tree(branch), "branches must be trees"
     return [root_label] + branches
 
-def label(tree):
-    return tree[0]
+def label(t):
+    return t[0]
 
-def branches(tree):
-    return tree[1:]
+def branches(t):
+    return t[1:]
 
-def is_tree(tree):
-    if len(tree) < 1  or type(tree) != list:
+def is_tree(t):
+    if len(t) < 1  or type(t) != list:
         return False
     else:
-        for branch in branches(tree):
+        for branch in branches(t):
             if not is_tree(branch):
                 return False
     return True
 
-def is_leaf(tree):
-    if not is_tree(tree):
-        return False
-    if not len(tree) == 1:
-        return False
-    return True
+def is_leaf(t):
+    if not branches(t):
+        return True
+    return False
 
-def count_leaves(tree):
-    if is_leaf(tree):
+def count_binary_leaves(t):
+    if is_leaf(t):
         return 1
-    branch_left, branch_right = branches(tree)
-    return count_leaves(branch_left) + count_leaves(branch_right)
+    branch_left, branch_right = branches(t)
+    return count_binary_leaves(branch_left) + count_binary_leaves(branch_right)
+
+def combine_leaves(t):
+    if is_leaf(t):
+        return label(t)
+    else:
+        return [combine_leaves(br) for br in branches(t)] 
 
 def fib_tree(n):
     if n == 0:
@@ -50,13 +54,13 @@ def partition_tree(n, m):
     # for further using where should judge whether m is reduced or not
     return tree(m, [partition_tree(n-m, m), partition_tree(n, m-1)])
 
-def print_partition_tree(tree, partition = []):
-    if is_leaf(tree):
-        if label(tree):
+def print_partition_tree(t, partition = []):
+    if is_leaf(t):
+        if label(t):
             print([partition])
     else:
-        with_branch, without_branch = branches(tree)
-        now_m = str(label(tree))
+        with_branch, without_branch = branches(t)
+        now_m = str(label(t))
         print_partition_tree(with_branch, partition + [now_m])
         print_partition_tree(without_branch, partition)
     # Use a list to store all the partition to print.
