@@ -40,7 +40,7 @@ def about(topic):
     "*** YOUR CODE HERE ***"
     def about_with_topic(sentence):
         sentence_to_lst = split(lower(remove_punctuation(sentence)))
-        print("DEBUG:", sentence)
+
         for ind_topic in topic:
             if ind_topic in sentence_to_lst:
                 return True
@@ -111,8 +111,6 @@ def autocorrect(user_word, valid_words, diff_function, limit):
         return user_word
     else:
         diff_num_lst = [diff_function(user_word, valid_word, limit) for valid_word in valid_words]
-        print("DEBUG:", diff_num_lst)
-        print("DEBUG:", diff_num_lst[find_index_of_min(diff_num_lst)])
         
         if diff_num_lst[find_index_of_min(diff_num_lst)] <= limit:
             return valid_words[find_index_of_min(diff_num_lst)]
@@ -134,34 +132,42 @@ def shifty_shifts(start, goal, limit):
         diff_len = abs(len(start) - len(goal))
         min_len = min(len(start), len(goal))
         return diff_len + shifty_shifts(start[0:min_len], goal[0:min_len], limit) 
+
     if start[0] == goal[0]:
         return shifty_shifts(start[1:], goal[1:], limit)
     else:
         return 1 + shifty_shifts(start[1:], goal[1:], limit - 1)
-
     # END PROBLEM 6
 
 
 def meowstake_matches(start, goal, limit):
     """A diff function that computes the edit distance from START to GOAL."""
-    assert False, 'Remove this line'
 
-    if ______________: # Fill in the condition
+    if limit < 0:
+        return 1
+
+    elif len(start) == 0 or len(goal) == 0: # Fill in the condition
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return abs(len(start) - len(goal))
         # END
 
-    elif ___________: # Feel free to remove or add additional cases
+    elif start[0] == goal[0]: # Feel free to remove or add additional cases
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return meowstake_matches(start[1:], goal[1:], limit)
         # END
 
     else:
-        add_diff = ...  # Fill in these lines
-        remove_diff = ... 
-        substitute_diff = ... 
+        add_diff = meowstake_matches(start[0:], goal[1:], limit - 1)  # Fill in these lines
+        remove_diff = meowstake_matches(start[1:], goal[0:], limit - 1) 
+        substitute_diff = meowstake_matches(start[1:], goal[1:], limit - 1) 
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return 1 + min(add_diff, remove_diff, substitute_diff)
+        # Well, it's just to take care of base case and the recussive steps.
+        # It's no use to pay too much attention to the inner process of recussion.
+        # Just to prove it is true or to be feel free to convince you of it.
         # END
 
 
@@ -179,6 +185,14 @@ def report_progress(typed, prompt, id, send):
     """Send a report of your id and progress so far to the multiplayer server."""
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    ratio = 0.0
+    for i in range(len(typed)):
+        if typed[i] == prompt[i]:
+            ratio =  (i+1) / len(prompt)
+        else:
+            break
+    send({"id": id, "progress": ratio})
+    return ratio
     # END PROBLEM 8
 
 
@@ -205,6 +219,10 @@ def time_per_word(times_per_player, words):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    times_lst = []
+    for i in range(len(times_per_player)):
+        times_lst.append([times_per_player[i][j + 1] - times_per_player[i][j] for j in range(len(times_per_player[0]) - 1)])
+    return game(words, times_lst)
     # END PROBLEM 9
 
 
@@ -220,6 +238,17 @@ def fastest_words(game):
     words = range(len(all_words(game)))    # An index for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    res_lst = []
+    for i in players:
+        fastest_words_of_player = []
+
+        for j in words:
+            times_lst = [time_of_player[j] for time_of_player in all_times(game)]
+            if i == times_lst.index(min(times_lst)):
+                fastest_words_of_player.append(all_words(game)[j])
+        res_lst.append(fastest_words_of_player)
+
+    return res_lst
     # END PROBLEM 10
 
 
